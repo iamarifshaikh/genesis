@@ -1,10 +1,11 @@
 import sys  
-sys.path.append('/blockchain')
+sys.path.append('F:/blockchain')
 
 from Blockchain.backend.core.block import Block
 from Blockchain.backend.core.blockheader import Blockheader
 from Blockchain.backend.util.util import hash256
 from Blockchain.backend.core.database.database import BlockchainDB
+from Blockchain.backend.core.Transaction import CoinbaseTransaction
 
 import time
 
@@ -30,12 +31,15 @@ class Blockchain:
 
     def addBlock(self,BlockHeight,prevBlockHash):
         timestamp = int(time.time())
-        Transaction = f"Codies Alert sent {BlockHeight} Genesis To Joe"
-        merkleRoot = hash256(Transaction.encode()).hex()
+        coinbaseInstance = CoinbaseTransaction(BlockHeight)
+        coinbaseTx = coinbaseInstance.coinBaseTransaction()
+        
+        # Transaction = f"Codies Alert sent {BlockHeight} Genesis To Joe"
+        merkleRoot = ' '
         bits = 'ffff001f'
         blockheader = Blockheader(VERSION,prevBlockHash,merkleRoot,timestamp,bits)
         blockheader.mine()
-        self.writeOnDisk([Block(BlockHeight,1,blockheader.__dict__,1,Transaction).__dict__])
+        self.writeOnDisk([Block(BlockHeight,1,blockheader.__dict__,1,coinbaseTx.toDict()).__dict__])
         # print(json.dumps(self.chain,indent = 4))
 
     def main(self):
