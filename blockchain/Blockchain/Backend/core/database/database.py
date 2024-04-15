@@ -9,7 +9,7 @@ class BaseDB:
         if not os.path.exists(self.filepath):
             print(f"File {self.filepath} not available")
             return False
-        
+
         with open(self.filepath, 'r') as file:
             raw = file.readline()
 
@@ -40,3 +40,8 @@ class BlockchainDB(BaseDB):
 
         if data:
             return data[-1]
+        
+class AccountDB(BaseDB):
+    def __init__(self):
+        self.filename = "account"
+        super().__init__()
